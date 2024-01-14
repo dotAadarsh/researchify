@@ -4,11 +4,14 @@ import json
 from datetime import datetime
 from xata.client import XataClient
 
-XATA_API_KEY=st.secrets["XATA_API_KEY"]
-XATA_DB_URL=st.secrets["XATA_DB_URL"]
+# Retrieve API key and database URL from Streamlit secrets
+XATA_API_KEY = st.secrets["XATA_API_KEY"]
+XATA_DB_URL = st.secrets["XATA_DB_URL"]
 
+# Initialize XataClient with API key and database URL
 xata = XataClient(api_key=XATA_API_KEY, db_url=XATA_DB_URL)
 
+# Streamlit page configuration
 st.set_page_config(
     page_title="Researchify",
     page_icon="🦋",
@@ -21,33 +24,31 @@ st.set_page_config(
     }
 )
 
+# Sidebar content - About the dataset
 with st.sidebar:
-    with st.expander("About the dataset", expanded=False):
+    with st.expander("About the dataset", expanded=True):
         st.subheader("Arxiv.org AI Research Papers Dataset [↗](https://www.kaggle.com/datasets/yasirabdaali/arxivorg-ai-research-papers-dataset)")
         st.markdown("This dataset is a valuable resource for researchers and practitioners in the field of AI. It can be used to track the latest research trends, identify emerging areas of research, and find relevant papers. This dataset contains the metadata for 10,000 research papers in the field of artificial intelligence (AI) that were published on arXiv.org.")
         st.markdown("License: [Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)")
-    
-def datetime_format(dateTime):
 
+# Function to format datetime
+def datetime_format(dateTime):
     # Parse the timestamp string
     timestamp = datetime.strptime(dateTime, "%Y-%m-%dT%H:%M:%SZ")
-
     # Format the timestamp
     formatted_timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S")
-
     return formatted_timestamp
 
+# Function to redact text within <em> tags
 def redact(text):
     # Define the pattern to match the text tag
     pattern = r"(?i)<em>(.*?)</em>"
-
     # Replace the tag with the desired format
     replaced_text = re.sub(pattern, r":violet[\1]", text)
-
     return replaced_text
 
+# Function to display search results
 def display(data):
-
     # Access totalCount
     total_count = data.get("totalCount", 0)
     st.toast(f"Results found: {total_count}")
@@ -61,14 +62,12 @@ def display(data):
             highlighted_title = f"{', '.join(highlight_info['title'])}"
             redacted_highlighted_title = redact(highlighted_title)
             st.subheader(redacted_highlighted_title)
-            
         else:
             st.subheader(record['title'])
         
         timestamp_str = record['published']
         
         if timestamp_str is not None:
-            
             formatted_timestamp = datetime_format(timestamp_str)
             st.caption(f"{formatted_timestamp} | {record['primary_category']}")
         
@@ -83,36 +82,36 @@ def display(data):
 
         st.write("---")
 
+# Function to search for papers in the Xata database
 @st.cache_data
 def paper_search(query, fuzziness):
-    
     data = xata.data().search_table("arxiv_ai", {
         "query": f"{query}",
         "fuzziness": fuzziness,
         "prefix": "phrase"
     })
-
-
     return data
 
+# Main function
 def main():
-    
     st.title("Researchify")
     st.subheader("Research smarter, discover faster.")
     st.caption("powered by Xata")
     
+    # Input fields for search query and fuzziness slider
     col1, col2 = st.columns([2, 1])
     with col1: 
-        # Get user input
         text_input = st.text_input("Enter your search query 👇")
 
     with col2: 
         fuzziness = st.slider("Fuzziness", 0, 2, 1, help="0: no typo tolerance 1: one letter changed/added/removed (default) 2: two letters changed/added/removed")
 
+    # Trigger search if user provides input
     if text_input is not None and fuzziness is not None:
         response = paper_search(text_input, fuzziness)
         if response is not None:
             display(response)
 
+# Run the main function
 if __name__ == "__main__":
     main()
