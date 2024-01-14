@@ -67,7 +67,7 @@ def chat():
         # Display user message in chat message container
         st.chat_message("user").markdown(prompt)
         # Add user message to chat history
-        st.session_state.messages.append({"role": "user", "content": prompt})
+        st.session_state.messages.append({"role": "user", "avatar":"human", "content": prompt})
         
         if session_count == 0:
             AIreponse = get_xata_ai(prompt)
@@ -88,14 +88,14 @@ def chat():
             answer = "Max Session reached!"
 
         # Display assistant response in chat message container
-        with st.chat_message("assistant", avatar="https://github.com/dotAadarsh/researchify/blob/main/xatafly-removebg-preview.png?raw=true"):
+        with st.chat_message("assistant", avatar="🦋"):
             st.markdown(answer)
             for i in record_ids:
                 record_data = xata.records().get("arxiv_ai", i)
                 st.link_button(record_data["title"], record_data["pdf_url"])
 
         # Add assistant response to chat history
-        st.session_state.messages.append({"role": "assistant", "content": answer})
+        st.session_state.messages.append({"role": "assistant", "avatar":"🦋", "content": answer})
         
 
 # Main function
