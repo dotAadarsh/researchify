@@ -46,8 +46,8 @@ def get_xata_ai(prompt):
                 "prefix": "phrase"
             }
         }
-    )
-    return result["answer"], result["sessionId"]
+    )                   
+    return result
 
 # Function to handle the chat interface
 def chat():
@@ -68,20 +68,35 @@ def chat():
         st.chat_message("user").markdown(prompt)
         # Add user message to chat history
         st.session_state.messages.append({"role": "user", "content": prompt})
-
+        
         if session_count == 0:
-            answer, session_id = get_xata_ai(prompt)
+            AIreponse = get_xata_ai(prompt)
+            answer = AIreponse["answer"]
+            session_id = AIreponse["sessionId"]
+            record_ids = AIreponse.get("records", [])
+
             session_count += 1
-        elif session_count > 0 and session_count < 3:
-            answer, session_id = follow_up(prompt, session_id)
+
+        elif session_count > 0 and session_count < 2:
+
+            AIreponse = follow_up(prompt, session_id)
+            answer = AIreponse["answer"]
+            session_id = AIreponse["sessionId"]
+            record_ids = AIreponse.get("records", [])
+
         else:
             answer = "Max Session reached!"
 
         # Display assistant response in chat message container
-        with st.chat_message("assistant"):
+        with st.chat_message("assistant", avatar="https://github.com/dotAadarsh/researchify/blob/main/xatafly-removebg-preview.png?raw=true"):
             st.markdown(answer)
+            for i in record_ids:
+                record_data = xata.records().get("arxiv_ai", i)
+                st.link_button(record_data["title"], record_data["pdf_url"])
+
         # Add assistant response to chat history
         st.session_state.messages.append({"role": "assistant", "content": answer})
+        
 
 # Main function
 def main():
