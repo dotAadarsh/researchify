@@ -83,6 +83,8 @@ Here is what the response might looks like:
 
 The Researchify app is built upon Streamlit and Xata's Python SDK. It has two pages, one is for search and other one is for chatbot.
 
+![Researchify - Chatbot](https://github.com/dotAadarsh/researchify/assets/71810927/b5e563c2-f748-4358-9eeb-e99a5109be78)
+
 ### Resources
 
 - [Xata Documentation](https://xata.io/docs)
