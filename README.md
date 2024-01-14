@@ -4,6 +4,8 @@ Research smarter, discover faster.
 
 The researchify is designed to streamline and expedite the process of finding research papers. Leveraging the powerful combination of [Streamlit](https://streamlit.io/) and [Xata](https://xata.io/), the application provides users with a user-friendly and efficient platform for accessing academic literature.
 
+[![Researchify Home](https://github.com/dotAadarsh/researchify/assets/71810927/6de9f65e-0087-45b5-b457-20313c5cdd68)](https://researchify.streamlit.app/)
+
 ### Features
 
 1. **Efficient Search:** Quickly locate relevant research papers based on keywords.
