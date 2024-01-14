@@ -15,14 +15,14 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="auto",
     menu_items={
-        'Get Help': 'https://www.extremelycoolapp.com/help',
-        'Report a bug': "https://www.extremelycoolapp.com/bug",
+        'Get Help': 'https://github.com/dotAadarsh/researchify',
+        'Report a bug': "https://github.com/dotAadarsh/researchify",
         'About': "### Search the Arxiv.org AI Research Papers with ease!"
     }
 )
 
 with st.sidebar:
-    with st.expander("About the dataset", expanded=True):
+    with st.expander("About the dataset", expanded=False):
         st.subheader("Arxiv.org AI Research Papers Dataset [↗](https://www.kaggle.com/datasets/yasirabdaali/arxivorg-ai-research-papers-dataset)")
         st.markdown("This dataset is a valuable resource for researchers and practitioners in the field of AI. It can be used to track the latest research trends, identify emerging areas of research, and find relevant papers. This dataset contains the metadata for 10,000 research papers in the field of artificial intelligence (AI) that were published on arXiv.org.")
         st.markdown("License: [Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)")
